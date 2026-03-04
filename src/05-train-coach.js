@@ -48,21 +48,51 @@
  *   areAllConfirmed(passengers)          // => true/false
  */
 export function findPassenger(passengers, name) {
-  // Your code here
+  if (!Array.isArray(passengers) || typeof name !== "string") return undefined;
+
+  const result = passengers.find((passenger) => {
+    return passenger.name.toLowerCase() === name.toLowerCase();
+  });
+
+  return result;
 }
 
 export function getPassengerIndex(passengers, name) {
-  // Your code here
+  if (!Array.isArray(passengers) || typeof name !== "string") return -1;
+
+  const result = passengers.findIndex((passenger) => {
+    return passenger.name.toLowerCase() === name.toLowerCase();
+  });
+
+  return result;
 }
 
 export function isAnyWaitlisted(passengers) {
-  // Your code here
+  if (!Array.isArray(passengers) || passengers.length < 0) return false;
+
+  const result = passengers.some((passenger) => {
+    return passenger.status === "waitlisted";
+  });
+
+  return result;
 }
 
 export function areAllConfirmed(passengers) {
-  // Your code here
+  if (!Array.isArray(passengers) || passengers.length <= 0) return false;
+
+  const result = passengers.every((passenger) => {
+    return passenger.status === "confirmed";
+  });
+
+  return result;
 }
 
 export function getWaitlistedPassengers(passengers) {
-  // Your code here
+  if (!Array.isArray(passengers)) return [];
+
+  const result = passengers.filter((passenger) => {
+    return passenger.status === "waitlisted";
+  });
+
+  return result;
 }

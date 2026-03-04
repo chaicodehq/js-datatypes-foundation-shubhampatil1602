@@ -53,17 +53,76 @@
  *   // => "RAJASTHANI THALI (Veg) - Items: dal - Rs.250.00"
  */
 export function createThaliDescription(thali) {
-  // Your code here
+  if (
+    typeof thali !== "object" ||
+    thali === null ||
+    !thali.name ||
+    !thali.items ||
+    !thali.price ||
+    typeof thali.price !== "number" ||
+    typeof thali.isVeg !== "boolean"
+  ) {
+    return "";
+  }
+
+  const NAME = thali.name.toUpperCase();
+  const vegNonveg = thali.isVeg ? "Veg" : "Non-Veg";
+  const items = thali.items.join(", ");
+  const price = thali.price.toFixed(2);
+
+  return `${NAME} (${vegNonveg}) - Items: ${items} - Rs.${price}`;
 }
 
 export function getThaliStats(thalis) {
-  // Your code here
+  if (!Array.isArray(thalis) || thalis.length === 0) {
+    return null;
+  }
+
+  const isVeg = thalis.filter((thali) => thali.isVeg);
+  const avgPrice =
+    thalis.reduce((acc, curr) => acc + curr.price, 0) / thalis.length;
+
+  return {
+    totalThalis: thalis.length,
+    vegCount: isVeg.length,
+    nonVegCount: thalis.length - isVeg.length,
+    avgPrice: avgPrice.toFixed(2),
+    cheapest: Math.min(...thalis.map((thali) => thali.price)),
+    costliest: Math.max(...thalis.map((thali) => thali.price)),
+    names: thalis.map((thali) => thali.name),
+  };
 }
 
 export function searchThaliMenu(thalis, query) {
-  // Your code here
+  if (!Array.isArray(thalis) || typeof query !== "string") {
+    return [];
+  }
+
+  return thalis.filter((thali) => {
+    return (
+      thali.name.toLowerCase().includes(query.toLowerCase()) ||
+      thali.items.some((item) =>
+        item.toLowerCase().includes(query.toLowerCase()),
+      )
+    );
+  });
 }
 
 export function generateThaliReceipt(customerName, thalis) {
-  // Your code here
+  if (
+    typeof customerName !== "string" ||
+    !Array.isArray(thalis) ||
+    thalis.length === 0
+  ) {
+    return "";
+  }
+
+  const total = thalis.reduce((acc, curr) => acc + curr.price, 0);
+  const count = thalis.length;
+  const receipt = thalis
+    .map((thali) => {
+      return `- ${thali.name} x Rs.${thali.price}`;
+    })
+    .join("\n");
+  return `THALI RECEIPT\n---\nCustomer: ${customerName.toUpperCase()}\n${receipt}\n---\nTotal: Rs.${total}\nItems: ${count}`;
 }
